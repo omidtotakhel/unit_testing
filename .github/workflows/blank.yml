@@ -50,11 +50,9 @@ jobs:
 
       - name: Run Odoo tests
         run: |
-          odoo \
-            --test-enable \
-            --stop-after-init \
-            -d test_db \
-            --db_host=localhost \
-            --db_user=odoo \
-            --db_password=odoo \
-            --addons-path=addons
+          docker run --rm \
+                --network host \
+                -v ${{ github.workspace }}/addons:/mnt/extra-addons \
+                odoo:17 \
+                odoo --test-enable --stop-after-init -d test_db \
+                  --db_host=localhost --db_user=odoo --db_password=odoo
