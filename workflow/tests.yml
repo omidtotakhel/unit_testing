@@ -57,4 +57,4 @@ jobs:
             --db_host=localhost \
             --db_user=odoo \
             --db_password=odoo \
-            --addons-path=custom_addons
+            --addons-path=addons
