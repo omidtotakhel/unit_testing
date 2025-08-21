@@ -3,7 +3,7 @@ name: Odoo Module Tests
 on:
   pull_request:
     branches:
-      - production   # Run tests only when PR targets production
+      - production  # Trigger on PRs to production
 
 jobs:
   test:
@@ -28,34 +28,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.10"  # match your Odoo version
+      - name: Install wget
+        run: sudo apt-get update && sudo apt-get install -y wget
 
-      - name: Install system dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            libxml2-dev libxslt-dev libldap2-dev libsasl2-dev libpq-dev \
-            gcc python3-dev
+      - name: Download Odoo install script
+        run: wget https://raw.githubusercontent.com/Yenthe666/InstallScript/17.0/odoo_install.sh
 
-      - name: Clone Odoo
-        run: |
-          git clone --depth 1 --branch 17.0 https://github.com/odoo/odoo.git odoo
+      - name: Make script executable
+        run: chmod 777 odoo_install.sh
 
-      - name: Install Python dependencies
-        run: |
-          pip install -r odoo/requirements.txt || true
-
+      - name: Run Odoo install script
+        run: ./odoo_install.sh
 
       - name: Run Odoo tests
         run: |
-          odoo \
-            --test-enable \
-            --stop-after-init \
-            -d test_db \
-            --db_host=localhost \
-            --db_user=odoo \
-            --db_password=odoo \
-            --addons-path=odoo/addons,addons
+          sudo -u odoo ./odoo-bin -d test-database --test-enable --stop-after-init
