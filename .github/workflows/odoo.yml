@@ -12,7 +12,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Kill current PID
+        run: sudo service odoo18-server stop
         
-      - name: Run Odoo
-        run: |
-          sudo -u odoo18 /opt/odoo18/odoo18-venv/bin/python3 /opt/odoo18/odoo/odoo-bin --config=/etc/odoo18.conf -u base --stop-after-init
+      - name: Run Odoo Unit Testing
+        run: sudo -u odoo18 /opt/odoo18/odoo18-venv/bin/python3 /opt/odoo18/odoo/odoo-bin --config=/etc/odoo18.conf -u base --stop-after-init
+
+      - name: Start Odoo Service 
+        run: sudo service odoo18-server start
