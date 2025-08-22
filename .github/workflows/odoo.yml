@@ -15,4 +15,4 @@ jobs:
         
       - name: Run Odoo
         run: |
-          sudo -U odoo18 /opt/odoo18/odoo18-venv/bin/python3 /opt/odoo18/odoo/odoo-bin --config=/etc/odoo18.conf -u base --stop-after-init
+          sudo -u odoo18 /opt/odoo18/odoo18-venv/bin/python3 /opt/odoo18/odoo/odoo-bin --config=/etc/odoo18.conf -u base --stop-after-init
