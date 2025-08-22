@@ -17,7 +17,7 @@ jobs:
         run: sudo service odoo18-server stop
         
       - name: Run Odoo Unit Testing
-        run: sudo -u odoo18 /opt/odoo18/odoo18-venv/bin/python3 /opt/odoo18/odoo/odoo-bin --config=/etc/odoo18.conf -u base --stop-after-init
+        run: sudo -u odoo18 /opt/odoo18/odoo18-venv/bin/python3 /opt/odoo18/odoo/odoo-bin --config=/etc/odoo18.conf --log-level=info --logfile=- -u base --stop-after-init
 
       - name: Start Odoo Service 
         run: sudo service odoo18-server start
