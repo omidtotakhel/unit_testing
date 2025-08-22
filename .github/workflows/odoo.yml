@@ -22,12 +22,12 @@ jobs:
       - name: Start Odoo Service 
         run: sudo service odoo18-server start
 
-      - name: Deploy to production
+      - name: On Success- Deploy to production
         if: ${{ success() && github.event.inputs.deploy == 'yes' }}
         run: |
           echo "✅ Tests passed! Deploying to production..."
     
-      - name: Handle failure
+      - name: On Failure - Abort deployment 
         if: ${{ failure() }}
         run: |
           echo "❌ Tests failed! Aborting deploy."
