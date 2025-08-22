@@ -17,7 +17,18 @@ jobs:
         run: sudo service odoo18-server stop
         
       - name: Run Odoo Unit Testing
-        run: sudo -u odoo18 /opt/odoo18/odoo18-venv/bin/python3 /opt/odoo18/odoo/odoo-bin --config=/etc/odoo18.conf --log-level=info --logfile=- -u base --stop-after-init
+        run: sudo -u odoo18 /opt/odoo18/odoo18-venv/bin/python3 /opt/odoo18/odoo/odoo-bin --config=/etc/odoo18.conf -d Staging --log-level=info --logfile=- -u web --stop-after-init
 
       - name: Start Odoo Service 
         run: sudo service odoo18-server start
+
+      - name: Deploy to production
+        if: ${{ success() && github.event.inputs.deploy == 'yes' }}
+        run: |
+          echo "✅ Tests passed! Deploying to production..."
+    
+      - name: Handle failure
+        if: ${{ failure() }}
+        run: |
+          echo "❌ Tests failed! Aborting deploy."
+    
