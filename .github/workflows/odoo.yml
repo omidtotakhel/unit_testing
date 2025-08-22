@@ -45,7 +45,8 @@ jobs:
 
       - name: Install Odoo dependencies
         run: |
-          pip install wheel
+          pip install wheel cython
+          pip install "gevent>=22.10.2"
           pip install -r requirements.txt || true
 
 
