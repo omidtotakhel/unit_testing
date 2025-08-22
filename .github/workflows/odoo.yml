@@ -1,0 +1,34 @@
+name: Odoo Module Tests
+
+on:
+  pull_request:
+    branches:
+      - production  # Trigger on PRs to production
+
+jobs:
+  odoo:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Kill current PID
+        run: sudo service odoo18-server stop
+        
+      - name: Run Odoo Unit Testing
+        run: sudo -u odoo18 /opt/odoo18/odoo18-venv/bin/python3 /opt/odoo18/odoo/odoo-bin --config=/etc/odoo18.conf -d Staging --log-level=info --logfile=- -u web --stop-after-init
+
+      - name: Start Odoo Service 
+        run: sudo service odoo18-server start
+
+      - name: On Success- Deploy to production
+        if: ${{ success() && github.event.inputs.deploy == 'yes' }}
+        run: |
+          echo "✅ Tests passed! Deploying to production..."
+    
+      - name: On Failure - Abort deployment 
+        if: ${{ failure() }}
+        run: |
+          echo "❌ Tests failed! Aborting deploy."
+    
